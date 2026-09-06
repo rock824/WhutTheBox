@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1220" />
-  <title>Shut the Box</title>
+  <title>Whut the Box</title>
   <style>
     :root {
       --bg: #0b1220;
@@ -286,7 +286,7 @@
         0 15px 24px rgba(0,0,0,.4);
     }
 
-    .tile.shut {
+    .tile.Whut {
       transform: rotateX(-78deg);
       opacity: .34;
       cursor: default;
@@ -294,7 +294,7 @@
       box-shadow: 0 2px 0 #6f572e;
     }
 
-    .tile.invalid:not(.shut) { opacity: .48; }
+    .tile.invalid:not(.Whut) { opacity: .48; }
 
     .play-area {
       display: grid;
@@ -483,7 +483,7 @@
 <body>
   <main class="game">
     <header>
-      <h1>Shut the Box</h1>
+      <h1>Whut the Box</h1>
       <div class="subtitle">Classic, 12-number, and local multiplayer play.</div>
     </header>
 
@@ -515,7 +515,7 @@
 
     <section class="scoreboard" id="scoreboard" aria-label="Player scores"></section>
 
-    <section class="board" aria-label="Shut the Box game board">
+    <section class="board" aria-label="Whut the Box game board">
       <div class="turn-banner">
         <div class="turn-label">Current Turn</div>
         <div class="turn-player" id="turnPlayer">Player 1</div>
@@ -549,7 +549,7 @@
 
       <div class="controls">
         <button class="action primary" id="rollBtn" type="button">🎲 Roll Dice</button>
-        <button class="action secondary" id="shutBtn" type="button" disabled>Shut Selected</button>
+        <button class="action secondary" id="WhutBtn" type="button" disabled>Whut Selected</button>
         <button class="action primary hidden-control" id="nextBtn" type="button">Next Player</button>
         <button class="action danger" id="resetBtn" type="button">Restart Match</button>
       </div>
@@ -557,7 +557,7 @@
 
     <section class="rules">
       <strong>How to play:</strong> Roll the dice, then select one or more open numbers whose total equals the roll.
-      Shut those numbers and keep rolling. If no combination matches the roll, your turn ends and your score is
+      Whut those numbers and keep rolling. If no combination matches the roll, your turn ends and your score is
       the total of all numbers still open. A perfect board scores <strong>0</strong>.<br><br>
       <strong>Multiplayer:</strong> Every player gets a fresh board using the same mode. After everyone has played,
       the <strong>lowest score wins</strong>. Ties are allowed.<br><br>
@@ -586,7 +586,7 @@
       const diceCountEl = root.querySelector('#diceCount');
       const turnPlayerEl = root.querySelector('#turnPlayer');
       const rollBtn = root.querySelector('#rollBtn');
-      const shutBtn = root.querySelector('#shutBtn');
+      const WhutBtn = root.querySelector('#WhutBtn');
       const nextBtn = root.querySelector('#nextBtn');
       const resetBtn = root.querySelector('#resetBtn');
 
@@ -657,7 +657,7 @@
           if (matchOver && winners.includes(i)) {
             state.textContent = 'Winner';
           } else if (scores[i] !== null) {
-            state.textContent = scores[i] === 0 ? 'Shut the Box!' : 'Finished';
+            state.textContent = scores[i] === 0 ? 'Whut the Box!' : 'Finished';
           } else if (!matchOver && i === currentPlayer) {
             state.textContent = 'Playing';
           } else {
@@ -682,7 +682,7 @@
           btn.setAttribute('aria-label', `Number ${n}`);
 
           if (!open.has(n)) {
-            btn.classList.add('shut');
+            btn.classList.add('Whut');
             btn.disabled = true;
             btn.setAttribute('aria-pressed', 'false');
           } else {
@@ -733,14 +733,14 @@
           messageEl.textContent = `That would exceed ${currentRoll}.`;
           messageEl.className = 'message result-bad';
         } else if (chosen === currentRoll) {
-          messageEl.textContent = `Perfect — shut ${[...selected].sort((a,b)=>a-b).join(' + ')}.`;
+          messageEl.textContent = `Perfect — Whut ${[...selected].sort((a,b)=>a-b).join(' + ')}.`;
           messageEl.className = 'message result-good';
         } else {
           messageEl.textContent = `Selected ${chosen}. Need ${currentRoll}.`;
           messageEl.className = 'message';
         }
 
-        shutBtn.disabled = sum(selected) !== currentRoll;
+        WhutBtn.disabled = sum(selected) !== currentRoll;
         renderTiles();
       }
 
@@ -764,7 +764,7 @@
 
         canRoll = false;
         rollBtn.disabled = true;
-        shutBtn.disabled = true;
+        WhutBtn.disabled = true;
         selected.clear();
 
         const count = currentDiceCount();
@@ -799,7 +799,7 @@
         }, 430);
       }
 
-      function shutSelected() {
+      function WhutSelected() {
         if (turnOver || matchOver || currentRoll === null || sum(selected) !== currentRoll) return;
 
         for (const n of selected) open.delete(n);
@@ -807,7 +807,7 @@
         currentRoll = null;
         canRoll = true;
         totalEl.textContent = '—';
-        shutBtn.disabled = true;
+        WhutBtn.disabled = true;
         rollBtn.disabled = false;
         updateStats();
 
@@ -818,25 +818,25 @@
 
         const count = currentDiceCount();
         renderDice(count);
-        messageEl.textContent = 'Numbers shut. Roll again.';
+        messageEl.textContent = 'Numbers Whut. Roll again.';
         messageEl.className = 'message result-good';
 
         renderTiles();
       }
 
-      function finishTurn(shutBox) {
+      function finishTurn(WhutBox) {
         turnOver = true;
         canRoll = false;
-        const score = shutBox ? 0 : getOpenTotal();
+        const score = WhutBox ? 0 : getOpenTotal();
         scores[currentPlayer] = score;
 
         rollBtn.disabled = true;
-        shutBtn.disabled = true;
+        WhutBtn.disabled = true;
         currentRoll = null;
 
-        if (shutBox) {
+        if (WhutBox) {
           totalEl.textContent = '0';
-          messageEl.textContent = `🏆 Player ${currentPlayer + 1} SHUT THE BOX! Score: 0.`;
+          messageEl.textContent = `🏆 Player ${currentPlayer + 1} Whut THE BOX! Score: 0.`;
           messageEl.className = 'message result-good';
         } else {
           messageEl.textContent = `No move. Player ${currentPlayer + 1} scores ${score}.`;
@@ -869,12 +869,12 @@
         if (playerCount === 1) {
           messageEl.textContent =
             low === 0
-              ? '🏆 Perfect game — you Shut the Box!'
+              ? '🏆 Perfect game — you Whut the Box!'
               : `Game complete. Final score: ${low}.`;
         } else if (winners.length === 1) {
           messageEl.textContent =
             low === 0
-              ? `🏆 Player ${winners[0] + 1} wins by Shutting the Box!`
+              ? `🏆 Player ${winners[0] + 1} wins by Whutting the Box!`
               : `🏆 Player ${winners[0] + 1} wins with ${low} points!`;
         } else {
           const names = winners.map(i => `Player ${i + 1}`).join(' & ');
@@ -911,7 +911,7 @@
         messageEl.className = 'message';
 
         rollBtn.disabled = false;
-        shutBtn.disabled = true;
+        WhutBtn.disabled = true;
         nextBtn.classList.add('hidden-control');
 
         const count = currentDiceCount();
@@ -940,7 +940,7 @@
 
       startBtn.addEventListener('click', startMatch);
       rollBtn.addEventListener('click', rollDice);
-      shutBtn.addEventListener('click', shutSelected);
+      WhutBtn.addEventListener('click', WhutSelected);
       nextBtn.addEventListener('click', nextPlayer);
       resetBtn.addEventListener('click', startMatch);
 
