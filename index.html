@@ -494,7 +494,7 @@
           <option value="classic">Classic — 1–9 / 2 Dice</option>
           <option value="extended">Extended — 1–12 / 3 Dice</option>
         </select>
-        <div class="mode-note" id="modeNote">Two dice, switching to one die when 6 or less remain.</div>
+        <div class="mode-note" id="modeNote">Two dice for the entire game.</div>
       </div>
 
       <div class="field">
@@ -561,7 +561,7 @@
       the total of all numbers still open. A perfect board scores <strong>0</strong>.<br><br>
       <strong>Multiplayer:</strong> Every player gets a fresh board using the same mode. After everyone has played,
       the <strong>lowest score wins</strong>. Ties are allowed.<br><br>
-      <strong>Dice rule:</strong> Classic starts with 2 dice and drops to 1 die when the open-number total is 6 or less.
+      <strong>Dice rule:</strong> Classic uses 2 dice for the entire game.
       Extended starts with 3 dice, drops to 2 when the open-number total is 12 or less, and drops to 1 when it is 6 or less.
     </section>
   </main>
@@ -624,7 +624,7 @@
           if (total <= 12) return 2;
           return 3;
         }
-        return total <= 6 ? 1 : 2;
+        return 2;
       }
 
       function secureDie() {
@@ -639,7 +639,7 @@
       function modeDescription() {
         return modeSelect.value === 'extended'
           ? 'Three dice on 1–12, then automatically 2 dice at 12 or less and 1 die at 6 or less.'
-          : 'Two dice on 1–9, switching to one die when 6 or less remain.';
+          : 'Two dice on 1–9 for the entire game.';
       }
 
       function renderScoreboard(winners = []) {
