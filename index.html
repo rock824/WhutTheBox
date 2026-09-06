@@ -494,7 +494,7 @@
           <option value="classic">Classic — 1–9 / 2 Dice</option>
           <option value="extended">Extended — 1–12 / 3 Dice</option>
         </select>
-        <div class="mode-note" id="modeNote">Two dice for the entire game.</div>
+        <div class="mode-note" id="modeNote">Two dice on 1–9 for the entire game.</div>
       </div>
 
       <div class="field">
@@ -562,7 +562,7 @@
       <strong>Multiplayer:</strong> Every player gets a fresh board using the same mode. After everyone has played,
       the <strong>lowest score wins</strong>. Ties are allowed.<br><br>
       <strong>Dice rule:</strong> Classic uses 2 dice for the entire game.
-      Extended starts with 3 dice, drops to 2 when the open-number total is 12 or less, and drops to 1 when it is 6 or less.
+      Extended uses 3 dice for the entire game.
     </section>
   </main>
 
@@ -618,13 +618,7 @@
       }
 
       function currentDiceCount() {
-        const total = getOpenTotal();
-        if (mode === 'extended') {
-          if (total <= 6) return 1;
-          if (total <= 12) return 2;
-          return 3;
-        }
-        return 2;
+        return mode === 'extended' ? 3 : 2;
       }
 
       function secureDie() {
@@ -638,7 +632,7 @@
 
       function modeDescription() {
         return modeSelect.value === 'extended'
-          ? 'Three dice on 1–12, then automatically 2 dice at 12 or less and 1 die at 6 or less.'
+          ? 'Three dice on 1–12 for the entire game.'
           : 'Two dice on 1–9 for the entire game.';
       }
 
@@ -824,10 +818,7 @@
 
         const count = currentDiceCount();
         renderDice(count);
-        messageEl.textContent =
-          count < lastDiceCount
-            ? `Nice! You are down to ${count === 1 ? 'one die' : count + ' dice'}. Roll again.`
-            : 'Numbers shut. Roll again.';
+        messageEl.textContent = 'Numbers shut. Roll again.';
         messageEl.className = 'message result-good';
 
         renderTiles();
