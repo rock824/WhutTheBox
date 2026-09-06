@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#111827" />
+  <meta name="theme-color" content="#0b1220" />
   <title>Shut the Box</title>
   <style>
     :root {
       --bg: #0b1220;
       --panel: #111827;
-      --panel-2: #182235;
+      --panel2: #182235;
       --text: #f8fafc;
       --muted: #9ca3af;
       --accent: #f59e0b;
-      --accent-2: #fbbf24;
+      --accent2: #fbbf24;
       --good: #22c55e;
       --bad: #ef4444;
       --tile: #f3e3bb;
-      --tile-edge: #c8aa71;
-      --tile-text: #231b12;
-      --shadow: rgba(0,0,0,.35);
+      --tileEdge: #c8aa71;
     }
 
     * { box-sizing: border-box; }
@@ -30,27 +28,27 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top, rgba(245,158,11,.12), transparent 30rem),
-        linear-gradient(180deg, #0a101b, var(--bg));
+        radial-gradient(circle at top, rgba(245,158,11,.13), transparent 32rem),
+        linear-gradient(180deg, #080d16, var(--bg));
       display: flex;
       justify-content: center;
-      padding: 24px 14px 40px;
+      padding: 22px 12px 40px;
     }
 
     .game {
-      width: min(980px, 100%);
+      width: min(1080px, 100%);
     }
 
     header {
       text-align: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2rem, 7vw, 4.3rem);
+      font-size: clamp(2rem, 7vw, 4.25rem);
       line-height: 1;
-      letter-spacing: .02em;
+      letter-spacing: .025em;
       text-transform: uppercase;
       text-shadow: 0 5px 20px rgba(0,0,0,.4);
     }
@@ -59,6 +57,136 @@
       color: var(--muted);
       margin-top: 8px;
       font-size: .95rem;
+    }
+
+    .setup {
+      display: grid;
+      grid-template-columns: 1fr 180px auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 14px;
+      background: rgba(17,24,39,.82);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin: 0 0 6px;
+      color: #cbd5e1;
+      font-size: .75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    select {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 10px;
+      background: #202b40;
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      padding: 0 12px;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245,158,11,.2);
+    }
+
+    .mode-note {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    button.action {
+      border: 0;
+      border-radius: 12px;
+      min-height: 48px;
+      padding: 0 20px;
+      font-size: 1rem;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+    }
+
+    button.action:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+    }
+
+    button.action:active:not(:disabled) { transform: translateY(0); }
+    button.action:disabled { opacity: .4; cursor: not-allowed; }
+
+    .primary {
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      color: #241600;
+    }
+
+    .secondary {
+      background: #253149;
+      color: #f8fafc;
+      border: 1px solid rgba(255,255,255,.08) !important;
+    }
+
+    .danger {
+      background: #3a2025;
+      color: #fecaca;
+      border: 1px solid rgba(239,68,68,.25) !important;
+    }
+
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .player-card {
+      position: relative;
+      min-width: 0;
+      background: rgba(17,24,39,.75);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 13px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .player-card.active {
+      border-color: rgba(245,158,11,.8);
+      box-shadow: inset 0 0 0 1px rgba(245,158,11,.25);
+    }
+
+    .player-card.winner {
+      border-color: rgba(34,197,94,.85);
+      box-shadow: inset 0 0 0 1px rgba(34,197,94,.25);
+    }
+
+    .player-name {
+      font-size: .78rem;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      font-weight: 800;
+    }
+
+    .player-score {
+      margin-top: 2px;
+      font-size: 1.6rem;
+      font-weight: 900;
+    }
+
+    .player-state {
+      min-height: 16px;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: .72rem;
     }
 
     .board {
@@ -72,10 +200,28 @@
         0 22px 60px rgba(0,0,0,.32);
     }
 
+    .turn-banner {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .turn-label {
+      color: #d1d5db;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-weight: 800;
+    }
+
+    .turn-player {
+      font-size: clamp(1.25rem, 3.5vw, 1.8rem);
+      font-weight: 900;
+    }
+
     .tiles {
       display: grid;
-      grid-template-columns: repeat(9, minmax(0, 1fr));
-      gap: clamp(5px, 1.2vw, 12px);
+      grid-template-columns: repeat(var(--tile-count, 9), minmax(0, 1fr));
+      gap: clamp(4px, 1vw, 10px);
       align-items: end;
       margin-bottom: 26px;
       perspective: 900px;
@@ -89,12 +235,12 @@
       background:
         linear-gradient(90deg, rgba(255,255,255,.22), transparent 15%, transparent 80%, rgba(0,0,0,.12)),
         linear-gradient(180deg, #f8eccd, var(--tile));
-      color: var(--tile-text);
-      font: 800 clamp(1rem, 3.8vw, 2.6rem)/1 Georgia, serif;
+      color: #231b12;
+      font: 800 clamp(.85rem, 3vw, 2.2rem)/1 Georgia, serif;
       cursor: pointer;
       box-shadow:
         inset 0 0 0 2px rgba(92,59,22,.24),
-        0 7px 0 var(--tile-edge),
+        0 7px 0 var(--tileEdge),
         0 11px 15px rgba(0,0,0,.35);
       transform-origin: bottom center;
       transition: transform .18s ease, filter .18s ease, opacity .18s ease, box-shadow .18s ease;
@@ -135,9 +281,7 @@
       box-shadow: 0 2px 0 #6f572e;
     }
 
-    .tile.invalid:not(.shut) {
-      opacity: .5;
-    }
+    .tile.invalid:not(.shut) { opacity: .48; }
 
     .play-area {
       display: grid;
@@ -149,29 +293,26 @@
     .dice-wrap {
       display: flex;
       justify-content: center;
-      gap: 14px;
-      min-width: 168px;
+      gap: 10px;
+      min-width: 235px;
     }
 
     .die {
-      width: clamp(62px, 10vw, 86px);
+      width: clamp(58px, 9vw, 82px);
       aspect-ratio: 1;
-      border-radius: 16px;
+      border-radius: 15px;
       background: linear-gradient(145deg, #fff, #ddd);
       color: #111;
       display: grid;
       place-items: center;
-      font-size: clamp(2.8rem, 8vw, 4.2rem);
+      font-size: clamp(2.7rem, 7vw, 4rem);
       line-height: 1;
       box-shadow: 0 9px 20px rgba(0,0,0,.35), inset 0 0 0 2px rgba(0,0,0,.08);
       user-select: none;
     }
 
     .die.hidden { display: none; }
-
-    .rolling {
-      animation: shake .45s ease-in-out;
-    }
+    .die.rolling { animation: shake .45s ease-in-out; }
 
     @keyframes shake {
       0%,100% { transform: rotate(0deg) scale(1); }
@@ -187,7 +328,7 @@
     }
 
     .roll-total {
-      color: var(--accent-2);
+      color: var(--accent2);
       font-weight: 900;
       font-size: clamp(2.1rem, 6vw, 3.5rem);
       line-height: 1;
@@ -205,7 +346,7 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(72px, 1fr));
       gap: 10px;
-      min-width: 170px;
+      min-width: 180px;
     }
 
     .stat {
@@ -218,14 +359,14 @@
 
     .stat-label {
       color: #cbd5e1;
-      font-size: .72rem;
+      font-size: .69rem;
       text-transform: uppercase;
-      letter-spacing: .09em;
+      letter-spacing: .08em;
     }
 
     .stat-value {
       margin-top: 2px;
-      font-size: 1.45rem;
+      font-size: 1.42rem;
       font-weight: 900;
     }
 
@@ -237,45 +378,11 @@
       gap: 10px;
     }
 
-    button.action {
-      border: 0;
-      border-radius: 12px;
-      min-height: 48px;
-      padding: 0 20px;
-      font-size: 1rem;
-      font-weight: 850;
-      cursor: pointer;
-      transition: transform .12s ease, filter .12s ease, opacity .12s ease;
-    }
-
-    button.action:hover:not(:disabled) {
-      transform: translateY(-2px);
-      filter: brightness(1.06);
-    }
-
-    button.action:active:not(:disabled) { transform: translateY(0); }
-    button.action:disabled { opacity: .4; cursor: not-allowed; }
-
-    .primary {
-      background: linear-gradient(180deg, var(--accent-2), var(--accent));
-      color: #241600;
-    }
-
-    .secondary {
-      background: #253149;
-      color: #f8fafc;
-      border: 1px solid rgba(255,255,255,.08) !important;
-    }
-
-    .danger {
-      background: #3a2025;
-      color: #fecaca;
-      border: 1px solid rgba(239,68,68,.25) !important;
-    }
+    .hidden-control { display: none !important; }
 
     .rules {
       margin: 18px auto 0;
-      max-width: 760px;
+      max-width: 850px;
       background: rgba(17,24,39,.7);
       border: 1px solid rgba(255,255,255,.08);
       border-radius: 16px;
@@ -286,18 +393,44 @@
     }
 
     .rules strong { color: #fff; }
-
     .result-good { color: #86efac; }
     .result-bad { color: #fca5a5; }
 
-    @media (max-width: 700px) {
+    @media (max-width: 780px) {
+      .setup {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .setup .start-wrap {
+        grid-column: 1 / -1;
+      }
+
+      .setup .start-wrap button { width: 100%; }
+
+      .scoreboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .board {
         padding: 18px 10px 22px;
         border-width: 5px;
       }
 
       .tiles { gap: 4px; margin-bottom: 22px; }
-      .tile { border-radius: 6px 6px 4px 4px; box-shadow: inset 0 0 0 1px rgba(92,59,22,.24), 0 5px 0 var(--tile-edge), 0 8px 10px rgba(0,0,0,.28); }
+
+      .tiles.extended {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        row-gap: 14px;
+      }
+
+      .tile {
+        border-radius: 6px 6px 4px 4px;
+        box-shadow:
+          inset 0 0 0 1px rgba(92,59,22,.24),
+          0 5px 0 var(--tileEdge),
+          0 8px 10px rgba(0,0,0,.28);
+      }
+
       .tile::after { height: 4px; bottom: -4px; }
 
       .play-area {
@@ -306,11 +439,20 @@
       }
 
       .score-panel {
-        width: min(300px, 100%);
+        width: min(320px, 100%);
         margin: 0 auto;
       }
 
       .status { order: -1; }
+      .dice-wrap { min-width: 0; }
+    }
+
+    @media (max-width: 430px) {
+      .setup { grid-template-columns: 1fr; }
+      .setup .start-wrap { grid-column: auto; }
+      .scoreboard { grid-template-columns: 1fr 1fr; }
+      .tiles:not(.extended) { grid-template-columns: repeat(9, minmax(0,1fr)); }
+      .tile { font-size: clamp(.8rem, 5vw, 1.4rem); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -325,16 +467,50 @@
   <main class="game">
     <header>
       <h1>Shut the Box</h1>
-      <div class="subtitle">Roll the dice. Shut the numbers. Clear the board.</div>
+      <div class="subtitle">Classic, 12-number, and local multiplayer play.</div>
     </header>
 
+    <section class="setup" aria-label="Game setup">
+      <div class="field">
+        <label for="modeSelect">Game Mode</label>
+        <select id="modeSelect">
+          <option value="classic">Classic — 1–9 / 2 Dice</option>
+          <option value="extended">Extended — 1–12 / 3 Dice</option>
+        </select>
+        <div class="mode-note" id="modeNote">Two dice, switching to one die when 6 or less remain.</div>
+      </div>
+
+      <div class="field">
+        <label for="playerSelect">Players</label>
+        <select id="playerSelect">
+          <option value="1">1 Player</option>
+          <option value="2">2 Players</option>
+          <option value="3">3 Players</option>
+          <option value="4">4 Players</option>
+        </select>
+        <div class="mode-note">Pass-and-play on the same device.</div>
+      </div>
+
+      <div class="start-wrap">
+        <button class="action primary" id="startBtn" type="button">Start New Match</button>
+      </div>
+    </section>
+
+    <section class="scoreboard" id="scoreboard" aria-label="Player scores"></section>
+
     <section class="board" aria-label="Shut the Box game board">
+      <div class="turn-banner">
+        <div class="turn-label">Current Turn</div>
+        <div class="turn-player" id="turnPlayer">Player 1</div>
+      </div>
+
       <div class="tiles" id="tiles"></div>
 
       <div class="play-area">
         <div class="dice-wrap" aria-label="Dice">
           <div class="die" id="die1">⚀</div>
           <div class="die" id="die2">⚀</div>
+          <div class="die hidden" id="die3">⚀</div>
         </div>
 
         <div class="status">
@@ -348,8 +524,8 @@
             <div class="stat-value" id="openTotal">45</div>
           </div>
           <div class="stat">
-            <div class="stat-label">Best Score</div>
-            <div class="stat-value" id="bestScore">—</div>
+            <div class="stat-label">Dice This Roll</div>
+            <div class="stat-value" id="diceCount">2</div>
           </div>
         </div>
       </div>
@@ -357,40 +533,60 @@
       <div class="controls">
         <button class="action primary" id="rollBtn" type="button">🎲 Roll Dice</button>
         <button class="action secondary" id="shutBtn" type="button" disabled>Shut Selected</button>
-        <button class="action danger" id="newBtn" type="button">New Game</button>
+        <button class="action primary hidden-control" id="nextBtn" type="button">Next Player</button>
+        <button class="action danger" id="resetBtn" type="button">Restart Match</button>
       </div>
     </section>
 
     <section class="rules">
       <strong>How to play:</strong> Roll the dice, then select one or more open numbers whose total equals the roll.
-      Click <strong>Shut Selected</strong> to close them and roll again. When the total of all open numbers is
-      <strong>6 or less</strong>, the game automatically switches to one die. If no combination can match the roll,
-      the game ends and your score is the total of the numbers left open. <strong>Score 0 to Shut the Box!</strong>
+      Shut those numbers and keep rolling. If no combination matches the roll, your turn ends and your score is
+      the total of all numbers still open. A perfect board scores <strong>0</strong>.<br><br>
+      <strong>Multiplayer:</strong> Every player gets a fresh board using the same mode. After everyone has played,
+      the <strong>lowest score wins</strong>. Ties are allowed.<br><br>
+      <strong>Dice rule:</strong> Classic starts with 2 dice and drops to 1 die when the open-number total is 6 or less.
+      Extended starts with 3 dice, drops to 2 when the open-number total is 12 or less, and drops to 1 when it is 6 or less.
     </section>
   </main>
 
   <script>
     (() => {
       const root = document.querySelector('.game');
+      const modeSelect = root.querySelector('#modeSelect');
+      const playerSelect = root.querySelector('#playerSelect');
+      const modeNote = root.querySelector('#modeNote');
+      const startBtn = root.querySelector('#startBtn');
+      const scoreboardEl = root.querySelector('#scoreboard');
       const tilesEl = root.querySelector('#tiles');
-      const die1El = root.querySelector('#die1');
-      const die2El = root.querySelector('#die2');
+      const dieEls = [
+        root.querySelector('#die1'),
+        root.querySelector('#die2'),
+        root.querySelector('#die3')
+      ];
       const totalEl = root.querySelector('#rollTotal');
       const messageEl = root.querySelector('#message');
       const openTotalEl = root.querySelector('#openTotal');
-      const bestScoreEl = root.querySelector('#bestScore');
+      const diceCountEl = root.querySelector('#diceCount');
+      const turnPlayerEl = root.querySelector('#turnPlayer');
       const rollBtn = root.querySelector('#rollBtn');
       const shutBtn = root.querySelector('#shutBtn');
-      const newBtn = root.querySelector('#newBtn');
+      const nextBtn = root.querySelector('#nextBtn');
+      const resetBtn = root.querySelector('#resetBtn');
 
       const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
 
-      let open = new Set([1,2,3,4,5,6,7,8,9]);
+      let mode = 'classic';
+      let tileMax = 9;
+      let playerCount = 1;
+      let currentPlayer = 0;
+      let scores = [null];
+      let open = new Set();
       let selected = new Set();
       let currentRoll = null;
       let canRoll = true;
-      let gameOver = false;
-      let bestScore = null;
+      let turnOver = false;
+      let matchOver = false;
+      let lastDiceCount = 2;
 
       function sum(values) {
         return [...values].reduce((a, b) => a + b, 0);
@@ -400,9 +596,74 @@
         return sum(open);
       }
 
+      function freshOpenSet() {
+        return new Set(Array.from({length: tileMax}, (_, i) => i + 1));
+      }
+
+      function currentDiceCount() {
+        const total = getOpenTotal();
+        if (mode === 'extended') {
+          if (total <= 6) return 1;
+          if (total <= 12) return 2;
+          return 3;
+        }
+        return total <= 6 ? 1 : 2;
+      }
+
+      function secureDie() {
+        if (window.crypto && window.crypto.getRandomValues) {
+          const a = new Uint32Array(1);
+          window.crypto.getRandomValues(a);
+          return (a[0] % 6) + 1;
+        }
+        return Math.floor(Math.random() * 6) + 1;
+      }
+
+      function modeDescription() {
+        return modeSelect.value === 'extended'
+          ? 'Three dice on 1–12, then automatically 2 dice at 12 or less and 1 die at 6 or less.'
+          : 'Two dice on 1–9, switching to one die when 6 or less remain.';
+      }
+
+      function renderScoreboard(winners = []) {
+        scoreboardEl.innerHTML = '';
+        for (let i = 0; i < playerCount; i++) {
+          const card = document.createElement('div');
+          card.className = 'player-card';
+          if (!matchOver && i === currentPlayer) card.classList.add('active');
+          if (winners.includes(i)) card.classList.add('winner');
+
+          const name = document.createElement('div');
+          name.className = 'player-name';
+          name.textContent = `Player ${i + 1}`;
+
+          const score = document.createElement('div');
+          score.className = 'player-score';
+          score.textContent = scores[i] === null ? '—' : scores[i];
+
+          const state = document.createElement('div');
+          state.className = 'player-state';
+          if (matchOver && winners.includes(i)) {
+            state.textContent = 'Winner';
+          } else if (scores[i] !== null) {
+            state.textContent = scores[i] === 0 ? 'Shut the Box!' : 'Finished';
+          } else if (!matchOver && i === currentPlayer) {
+            state.textContent = 'Playing';
+          } else {
+            state.textContent = 'Waiting';
+          }
+
+          card.append(name, score, state);
+          scoreboardEl.appendChild(card);
+        }
+      }
+
       function renderTiles() {
         tilesEl.innerHTML = '';
-        for (let n = 1; n <= 9; n++) {
+        tilesEl.style.setProperty('--tile-count', tileMax);
+        tilesEl.classList.toggle('extended', tileMax === 12);
+
+        for (let n = 1; n <= tileMax; n++) {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'tile';
@@ -425,14 +686,28 @@
               btn.classList.add('invalid');
             }
 
+            btn.disabled = turnOver || matchOver || currentRoll === null;
             btn.addEventListener('click', () => toggleTile(n));
           }
+
           tilesEl.appendChild(btn);
         }
       }
 
+      function renderDice(count, values = null) {
+        diceCountEl.textContent = count;
+        for (let i = 0; i < 3; i++) {
+          dieEls[i].classList.toggle('hidden', i >= count);
+          if (values && i < count) {
+            dieEls[i].textContent = faces[values[i] - 1];
+          } else if (!values && i < count) {
+            dieEls[i].textContent = '⚀';
+          }
+        }
+      }
+
       function toggleTile(n) {
-        if (gameOver || currentRoll === null || !open.has(n)) return;
+        if (turnOver || matchOver || currentRoll === null || !open.has(n)) return;
 
         if (selected.has(n)) {
           selected.delete(n);
@@ -440,20 +715,21 @@
           selected.add(n);
         }
 
-        const selectedTotal = sum(selected);
-        if (selectedTotal > currentRoll) {
+        const chosen = sum(selected);
+
+        if (chosen > currentRoll) {
           selected.delete(n);
           messageEl.textContent = `That would exceed ${currentRoll}.`;
           messageEl.className = 'message result-bad';
-        } else if (selectedTotal === currentRoll) {
+        } else if (chosen === currentRoll) {
           messageEl.textContent = `Perfect — shut ${[...selected].sort((a,b)=>a-b).join(' + ')}.`;
           messageEl.className = 'message result-good';
         } else {
-          messageEl.textContent = `Selected ${selectedTotal}. Need ${currentRoll}.`;
+          messageEl.textContent = `Selected ${chosen}. Need ${currentRoll}.`;
           messageEl.className = 'message';
         }
 
-        shutBtn.disabled = selectedTotal !== currentRoll;
+        shutBtn.disabled = sum(selected) !== currentRoll;
         renderTiles();
       }
 
@@ -472,53 +748,48 @@
         return false;
       }
 
-      function randomDie() {
-        return Math.floor(Math.random() * 6) + 1;
-      }
-
       function rollDice() {
-        if (!canRoll || gameOver) return;
+        if (!canRoll || turnOver || matchOver) return;
 
         canRoll = false;
         rollBtn.disabled = true;
         shutBtn.disabled = true;
         selected.clear();
 
-        const oneDie = getOpenTotal() <= 6;
-        die2El.classList.toggle('hidden', oneDie);
+        const count = currentDiceCount();
+        lastDiceCount = count;
+        renderDice(count);
 
-        die1El.classList.remove('rolling');
-        die2El.classList.remove('rolling');
-        void die1El.offsetWidth;
-        die1El.classList.add('rolling');
-        if (!oneDie) die2El.classList.add('rolling');
+        for (let i = 0; i < count; i++) {
+          dieEls[i].classList.remove('rolling');
+          void dieEls[i].offsetWidth;
+          dieEls[i].classList.add('rolling');
+        }
 
-        messageEl.textContent = oneDie ? 'Rolling one die…' : 'Rolling two dice…';
+        messageEl.textContent = `Rolling ${count === 1 ? 'one die' : count + ' dice'}…`;
         messageEl.className = 'message';
 
         setTimeout(() => {
-          const d1 = randomDie();
-          const d2 = oneDie ? 0 : randomDie();
+          const values = [];
+          for (let i = 0; i < count; i++) values.push(secureDie());
 
-          die1El.textContent = faces[d1 - 1];
-          if (!oneDie) die2El.textContent = faces[d2 - 1];
-
-          currentRoll = d1 + d2;
+          renderDice(count, values);
+          currentRoll = values.reduce((a,b) => a + b, 0);
           totalEl.textContent = currentRoll;
           renderTiles();
 
           if (!hasCombination(currentRoll)) {
-            endGame();
+            finishTurn(false);
             return;
           }
 
           messageEl.textContent = `Choose open numbers totaling ${currentRoll}.`;
-          canRoll = false;
+          messageEl.className = 'message';
         }, 430);
       }
 
       function shutSelected() {
-        if (gameOver || currentRoll === null || sum(selected) !== currentRoll) return;
+        if (turnOver || matchOver || currentRoll === null || sum(selected) !== currentRoll) return;
 
         for (const n of selected) open.delete(n);
         selected.clear();
@@ -530,69 +801,143 @@
         updateStats();
 
         if (open.size === 0) {
-          gameOver = true;
-          rollBtn.disabled = true;
-          messageEl.textContent = '🏆 SHUT THE BOX! Perfect score: 0!';
-          messageEl.className = 'message result-good';
-          updateBest(0);
-        } else {
-          const oneDie = getOpenTotal() <= 6;
-          messageEl.textContent = oneDie
-            ? 'Nice! One die from here — roll again.'
-            : 'Numbers shut. Roll again.';
-          messageEl.className = 'message result-good';
+          finishTurn(true);
+          return;
         }
+
+        const count = currentDiceCount();
+        renderDice(count);
+        messageEl.textContent =
+          count < lastDiceCount
+            ? `Nice! You are down to ${count === 1 ? 'one die' : count + ' dice'}. Roll again.`
+            : 'Numbers shut. Roll again.';
+        messageEl.className = 'message result-good';
 
         renderTiles();
       }
 
-      function endGame() {
-        gameOver = true;
+      function finishTurn(shutBox) {
+        turnOver = true;
         canRoll = false;
-        const score = getOpenTotal();
+        const score = shutBox ? 0 : getOpenTotal();
+        scores[currentPlayer] = score;
 
         rollBtn.disabled = true;
         shutBtn.disabled = true;
-        messageEl.textContent = `No move for ${currentRoll}. Game over — score: ${score}.`;
-        messageEl.className = 'message result-bad';
-        updateBest(score);
+        currentRoll = null;
+
+        if (shutBox) {
+          totalEl.textContent = '0';
+          messageEl.textContent = `🏆 Player ${currentPlayer + 1} SHUT THE BOX! Score: 0.`;
+          messageEl.className = 'message result-good';
+        } else {
+          messageEl.textContent = `No move. Player ${currentPlayer + 1} scores ${score}.`;
+          messageEl.className = 'message result-bad';
+        }
+
         renderTiles();
+        renderScoreboard();
+
+        if (currentPlayer >= playerCount - 1) {
+          finishMatch();
+        } else {
+          nextBtn.textContent = `Start Player ${currentPlayer + 2}`;
+          nextBtn.classList.remove('hidden-control');
+        }
       }
 
-      function updateBest(score) {
-        if (bestScore === null || score < bestScore) bestScore = score;
-        bestScoreEl.textContent = bestScore;
+      function finishMatch() {
+        matchOver = true;
+        nextBtn.classList.add('hidden-control');
+
+        const low = Math.min(...scores);
+        const winners = [];
+        scores.forEach((score, i) => {
+          if (score === low) winners.push(i);
+        });
+
+        renderScoreboard(winners);
+
+        if (playerCount === 1) {
+          messageEl.textContent =
+            low === 0
+              ? '🏆 Perfect game — you Shut the Box!'
+              : `Game complete. Final score: ${low}.`;
+        } else if (winners.length === 1) {
+          messageEl.textContent =
+            low === 0
+              ? `🏆 Player ${winners[0] + 1} wins by Shutting the Box!`
+              : `🏆 Player ${winners[0] + 1} wins with ${low} points!`;
+        } else {
+          const names = winners.map(i => `Player ${i + 1}`).join(' & ');
+          messageEl.textContent = `🤝 Tie! ${names} finish with ${low} points.`;
+        }
+
+        messageEl.className = 'message result-good';
+        turnPlayerEl.textContent = 'Match Complete';
+        resetBtn.textContent = 'Play Again';
+      }
+
+      function nextPlayer() {
+        if (!turnOver || matchOver || currentPlayer >= playerCount - 1) return;
+        currentPlayer++;
+        nextBtn.classList.add('hidden-control');
+        beginPlayerTurn();
       }
 
       function updateStats() {
         openTotalEl.textContent = getOpenTotal();
+        diceCountEl.textContent = currentDiceCount();
       }
 
-      function newGame() {
-        open = new Set([1,2,3,4,5,6,7,8,9]);
+      function beginPlayerTurn() {
+        open = freshOpenSet();
         selected = new Set();
         currentRoll = null;
         canRoll = true;
-        gameOver = false;
+        turnOver = false;
 
-        die1El.textContent = '⚀';
-        die2El.textContent = '⚀';
-        die2El.classList.remove('hidden');
+        turnPlayerEl.textContent = `Player ${currentPlayer + 1}`;
         totalEl.textContent = '—';
-        messageEl.textContent = 'Roll the dice to begin.';
+        messageEl.textContent = `Player ${currentPlayer + 1}, roll the dice to begin.`;
         messageEl.className = 'message';
+
         rollBtn.disabled = false;
         shutBtn.disabled = true;
+        nextBtn.classList.add('hidden-control');
+
+        const count = currentDiceCount();
+        lastDiceCount = count;
+        renderDice(count);
         updateStats();
         renderTiles();
+        renderScoreboard();
       }
 
+      function startMatch() {
+        mode = modeSelect.value;
+        tileMax = mode === 'extended' ? 12 : 9;
+        playerCount = Number(playerSelect.value);
+        currentPlayer = 0;
+        scores = Array(playerCount).fill(null);
+        matchOver = false;
+
+        resetBtn.textContent = 'Restart Match';
+        beginPlayerTurn();
+      }
+
+      modeSelect.addEventListener('change', () => {
+        modeNote.textContent = modeDescription();
+      });
+
+      startBtn.addEventListener('click', startMatch);
       rollBtn.addEventListener('click', rollDice);
       shutBtn.addEventListener('click', shutSelected);
-      newBtn.addEventListener('click', newGame);
+      nextBtn.addEventListener('click', nextPlayer);
+      resetBtn.addEventListener('click', startMatch);
 
-      updateStats();
-      renderTiles();
+      modeNote.textContent = modeDescription();
+      startMatch();
     })();
   </script>
 </body>
